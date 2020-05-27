@@ -116,6 +116,8 @@ const sprout = {
 
         await sprout.page.waitFor(500);
 
+        await sprout.page.screenshot({ path: util.getScreenshotPath(), fullPage: true });
+
         const data = await sprout.page.evaluate(async (COMPONENT) => {
             let timein;
             let timeout;
