@@ -26,7 +26,12 @@ const sprout = {
     login: async (username, password) => {
         console.log("Sprout Login.");
 
-        await sprout.page.goto(sprout.baseUrl, { waitUntil: "networkidle2" });
+        try {
+            await sprout.page.goto(sprout.baseUrl, { waitUntil: "networkidle2" });
+        } catch (err) {
+            console.log(err);
+            throw new Error("Cannot access the given URL.");
+        }
         
         await sprout.page.type(COMPONENT.LOGIN_ID_FIELD, username, { delay: 10 });
         await sprout.page.type(COMPONENT.LOGIN_PASSWORD_FIELD, password, { delay: 10 });
@@ -34,7 +39,7 @@ const sprout = {
         await sprout.page.click(COMPONENT.LOGIN_BUTTON);
 
         try {
-            await sprout.page.waitFor(COMPONENT.DASHBOARD_OK_INDICATOR);
+            await sprout.page.waitFor(COMPONENT.DASHBOARD_OK_INDICATOR, { timeout: 10000 });
             console.log("Successfully logged in to Sprout.");
         } catch (err) {
             console.log("Failed to login.");
